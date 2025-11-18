@@ -24,7 +24,7 @@ export default function Hero() {
 
         <div className="hero-right">
           <img
-            src={heroData.heroImage}
+            src="src/assets/hero-banner.jpg"
             alt="Hero Banner"
             className="hero-banner-img"
           />

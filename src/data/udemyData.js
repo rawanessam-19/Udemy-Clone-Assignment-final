@@ -43,27 +43,25 @@ export const categories = [
   },
 ];
 
-// featured courses (use Unsplash thumbnails)
 export const featuredCourses = [
-{
-  id: 201,
-  title: "The AI Engineer Course 2025: Complete AI Engineer Bootcamp",
-  instructor: "365 Careers",
-  price: "£349.99",
-  badge: "Bestseller",
-  rating: 4.4,
-  students: 1647,
-  image: "https://images.unsplash.com/your-thumb.jpg"
-}
-,
+  {
+    id: 201,
+    title: "The AI Engineer Course 2025: Complete AI Engineer Bootcamp",
+    instructor: "365 Careers",
+    price: "£349.99",
+    badge: "Bestseller",
+    rating: 4.4,
+    students: 1647,
+    image: "https://images.unsplash.com/photo-1584697964190-55d6b0b2f2d1?auto=format&fit=crop&w=800&q=60"
+  },
   {
     id: 202,
     title: "The Beginner's Guide to AI - Unity 6 Compatible",
     instructor: "Penny de B.",
     price: "£34.99",
     tag: "Bestseller",
-     rating: 4.0,
-  students: 250,
+    rating: 4.0,
+    students: 250,
     image:
       "https://images.unsplash.com/photo-1526378729258-4f8d3d4b6d69?auto=format&fit=crop&w=800&q=60",
   },
@@ -73,8 +71,8 @@ export const featuredCourses = [
     instructor: "Experience Academy",
     price: "£2,499.99",
     tag: "Bestseller",
-     rating: 3.1,
-  students: 50,
+    rating: 3.1,
+    students: 50,
     image:
       "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=60",
   },
@@ -84,12 +82,13 @@ export const featuredCourses = [
     instructor: "School of AI",
     price: "£34.99",
     tag: "Premium",
-     rating: 5.0,
-  students: 3500,
+    rating: 5.0,
+    students: 3500,
     image:
       "https://images.unsplash.com/photo-1526378729258-4f8d3d4b6d69?auto=format&fit=crop&w=800&q=60",
   },
 ];
+
 
 // trusted companies — use Clearbit logo service (hosted logos)
 export const trustedCompanies = [
