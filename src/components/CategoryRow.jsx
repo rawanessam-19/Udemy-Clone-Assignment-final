@@ -1,28 +1,28 @@
+// src/components/CategoryRow.jsx
 import React from "react";
 import { categories } from "../data/udemyData";
 
 export default function CategoryRow() {
+  if (!Array.isArray(categories) || categories.length === 0) return null;
+
   return (
-    <section className="section container">
-      <div className="section-head">
-        <h2>Learn essential career and life skills</h2>
-        <p className="muted">Udemy helps you build in-demand skills fast</p>
+    <section className="section container category-row-section" style={{ paddingTop: 28, paddingBottom: 8 }}>
+      <div className="section-head" style={{ marginBottom: 6 }}>
+        <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>Skills to transform your career and life</h2>
+        <p className="muted" style={{ marginTop: 8 }}>
+          From critical skills to technical topics, Udemy supports your professional development.
+        </p>
       </div>
 
-      <div className="categories-grid" style={{marginTop:14}}>
-        {categories.map((c) => (
-          <div className="card category-card" key={c.id}>
-            <div style={{display:'flex',gap:12,alignItems:'center'}}>
-              <div className="cat-icon">
-                <img src={c.image} alt={c.title} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:8}}/>
-              </div>
-              <div>
-                <div className="cat-title">{c.title}</div>
-                <div className="cat-sub muted">{c.subtitle}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Category tabs (visual only) */}
+      <div className="category-tabs-wrapper" style={{ marginTop: 12 }}>
+        <div className="category-tabs" role="list" style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
+          {categories.map(cat => (
+            <button key={cat.id} className="cat-tab" role="listitem" aria-label={cat.title} style={{ whiteSpace: "nowrap" }}>
+              {cat.title}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

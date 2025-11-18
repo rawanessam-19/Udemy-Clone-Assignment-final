@@ -338,3 +338,113 @@ header.navbar .nav-inner{
   .course-card.mini .course-thumb{height:130px;margin:10px;}
   .carousel-nav{display:none;}
 }
+/* ---- Lower area styles to match screenshot ---- */
+.category-row-section .section-head h2 { font-size: 20px; font-weight: 800; }
+.category-row-section .section-head p { color: var(--muted); margin-bottom: 6px; }
+
+.category-tabs { gap: 12px; display:flex; align-items:center; }
+.cat-tab { background:transparent; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; color:var(--muted); white-space:nowrap; }
+.cat-tab:hover { color:var(--text); }
+
+.featured-courses .course-grid .course-card { background:var(--card-bg); border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.04); padding:12px; }
+.featured-courses .thumb { border-radius:8px; overflow:hidden; }
+.featured-courses .course-title { font-size:14px; font-weight:700; color:var(--text); }
+.featured-courses .course-instructor { font-size:13px; color:var(--muted); }
+
+.badge-small { background:#eef2ff; padding:6px 8px; border-radius:8px; font-weight:700; font-size:12px; }
+.course-meta .rating, .course-meta .students { color:var(--muted); font-size:13px; }
+
+.trusted-strip { background:var(--company-strip-bg); }
+.trusted-inner { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.companies-list { display:flex; gap:28px; align-items:center; justify-content:center; flex-wrap:wrap; }
+
+/* responsive */
+@media (max-width: 1000px) {
+  .featured-courses .course-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .featured-courses .course-grid { grid-template-columns: 1fr; }
+  .category-tabs { padding-left: 8px; padding-right: 8px; }
+  .container { padding-left: 14px; padding-right: 14px; }
+}
+/* ----- Featured courses: rating, badges, students ----- */
+.course-card.enhanced { background: var(--card-bg); box-shadow: 0 10px 30px rgba(2,6,23,0.04); border-radius: 12px; padding: 12px; }
+.course-card.enhanced .thumb { border-radius: 8px; overflow: hidden; }
+
+/* Featured courses: enhanced grid + pills + stars */
+.enhanced-grid { margin-top: 6px; }
+.course-card.enhanced { background: var(--card-bg); box-shadow: 0 10px 30px rgba(2,6,23,0.04); border-radius: 12px; padding: 12px; }
+.course-card.enhanced .thumb { border-radius: 8px; overflow: hidden; }
+
+/* pill/badge */
+.badge-pill {
+  display:inline-flex; align-items:center; gap:8px; padding:6px 8px; border-radius:999px; font-weight:700; font-size:12px; background:#eef2ff; color:var(--text);
+}
+.badge-pill.bestseller{ background:#d1fae5; color:#065f46 }
+.badge-pill.premium{ background:#f5e8ff; color:#6b21a8 }
+
+/* rating and students pills */
+.rating-pill, .students-pill {
+  display:inline-flex; align-items:center; gap:6px; padding:6px 8px; border-radius:8px; font-size:12px; color:var(--muted);
+  background:#fff; border:1px solid rgba(15,23,42,0.04); box-shadow:0 6px 20px rgba(2,6,23,0.04);
+}
+
+/* responsive grid */
+@media (max-width:1000px){
+  .enhanced-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width:720px){
+  .enhanced-grid { grid-template-columns: 1fr !important; }
+  .category-tabs { padding-left:8px; padding-right:8px; }
+}
+/* ===== Rating & stars fixes ===== */
+
+/* ⭐ pill row styling */
+.meta-pills { display:flex; gap:8px; align-items:center; }
+
+/* base pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Bestseller pill */
+.small-badge {
+  background: #D1FAE5;
+  color: #065F46;
+  font-weight: 700;
+}
+
+/* star rating pill */
+.small-rating {
+  background: #fff;
+  border: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 0 6px 12px rgba(2,6,23,0.03);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* rating count pill */
+.small-count {
+  background: #fff;
+  border: 1px solid rgba(15,23,42,0.06);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* star sizes */
+.small-rating svg {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+}
+
+.small-rating svg path {
+  fill: #FBBF24;
+}

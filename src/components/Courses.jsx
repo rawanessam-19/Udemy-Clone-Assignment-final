@@ -1,9 +1,16 @@
 // src/components/Courses.jsx
 import React, { useRef, useState, useEffect } from "react";
-import { featuredCourses } from "../data/udemyData";
+import { categories } from "../data/udemyData";
+
+/**
+ * Carousel that shows category cards (Generative AI, IT Certifications, Data Science).
+ * - Uses `categories` from data file
+ * - Keeps swipe, keyboard, prev/next and dots
+ * - Responsive: visible 3 on desktop, adjusts with CSS already in App.css
+ */
 
 export default function Courses() {
-  const items = featuredCourses;
+  const items = Array.isArray(categories) ? categories : [];
   const visible = 3;
 
   const trackRef = useRef(null);
@@ -80,21 +87,19 @@ export default function Courses() {
   return (
     <section className="section container courses-section" style={{ paddingTop: 12, paddingBottom: 28 }}>
       <div className="courses-inner">
-        
-        {/* LEFT COLUMN – RESTORED ORIGINAL TEXT */}
+        {/* LEFT COLUMN – heading and description */}
         <div className="courses-left">
-          <h2 className="courses-hero">Skills to transform your career and life</h2>
+          <h2 className="courses-hero">Learn essential career and life skills</h2>
 
           <p className="muted" style={{ marginTop: 12, maxWidth: 260 }}>
-            From critical skills to technical topics — explore popular courses
+            Udemy helps you build in-demand skills fast and advance your career in a changing job market.
           </p>
         </div>
 
         {/* RIGHT COLUMN – CAROUSEL */}
         <div className="courses-right">
           <div className="carousel-wrapper" ref={containerRef}>
-
-            <button className="carousel-nav prev" onClick={goPrev}>‹</button>
+            <button className="carousel-nav prev" onClick={goPrev} aria-label="Previous">‹</button>
 
             <div
               className="carousel-viewport"
@@ -111,35 +116,42 @@ export default function Courses() {
                 ref={trackRef}
                 style={{ width: `${(items.length * 100) / visible}%` }}
               >
-                {items.map((course, idx) => {
+                {items.map((item, idx) => {
+                  // center logic to apply "active" styling
                   const centerIndex = Math.min(index + 1, items.length - 1);
                   const isCenter = idx === centerIndex;
 
                   return (
                     <div
-                      key={course.id}
+                      key={item.id ?? idx}
                       className={`carousel-item ${isCenter ? "active" : ""}`}
                       style={{ width: `${100 / items.length}%` }}
                     >
                       <article className="course-card mini">
-
                         <div
                           className="course-thumb"
                           style={{
-                            backgroundImage: `url(${course.image})`,
+                            backgroundImage: `url(${item.image})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center"
                           }}
                         />
 
                         <div className="course-info mini-info">
-                          <div className="course-learners">{course.subtitle}</div>
+                          {/* subtitle / learners bubble */}
+                          <div className="course-learners" aria-hidden>
+                            {item.subtitle}
+                          </div>
 
-                          <div className="course-title">{course.title}</div>
+                          {/* main title (category name) */}
+                          <div className="course-title" style={{ marginTop: 8 }}>
+                            {item.title}
+                          </div>
 
-                          <div className="course-meta-mini">
-                            <span className="muted">{course.instructor}</span>
-                            <span className="meta-right">→</span>
+                          {/* arrow */}
+                          <div className="course-meta-mini" style={{ marginTop: 10 }}>
+                            <div className="muted" />
+                            <div className="meta-right">→</div>
                           </div>
                         </div>
                       </article>
@@ -149,7 +161,7 @@ export default function Courses() {
               </div>
             </div>
 
-            <button className="carousel-nav next" onClick={goNext}>›</button>
+            <button className="carousel-nav next" onClick={goNext} aria-label="Next">›</button>
           </div>
 
           {/* DOTS */}
@@ -159,6 +171,7 @@ export default function Courses() {
                 key={i}
                 className={`dot ${i === index ? "active" : ""}`}
                 onClick={() => setIndex(i)}
+                aria-label={`Go to slide ${i + 1}`}
               />
             ))}
           </div>

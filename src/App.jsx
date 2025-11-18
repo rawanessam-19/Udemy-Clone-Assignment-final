@@ -1,14 +1,17 @@
 // src/App.jsx
 import React from "react";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Courses from "./components/Courses";
-// import FeaturedCourses from "./components/FeaturedCourses"; // KEEP commented out to avoid duplicate
-// import Categories from "./components/Categories"; // comment out if this was showing the top row duplicate
-
 import "./App.css";
 
-function App() {
+// top-level sections (must exist in src/components)
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Courses from "./components/Courses";         // carousel-only
+import AiCareer from "./components/AiCareer";       // dark promo block
+import CategoryRow from "./components/CategoryRow"; // "Skills to transform..." + categories
+import FeaturedCourses from "./components/FeaturedCourses"; // 4-card grid
+import Companies from "./components/Companies";     // trusted logos
+
+export default function App() {
   return (
     <div className="app-root">
       <header>
@@ -18,16 +21,21 @@ function App() {
       <main>
         <Hero />
 
-        {/* Only render the updated Courses component */}
+        {/* 3-card carousel directly under hero */}
         <Courses />
 
-        {/* If you want FeaturedCourses later, uncomment below but remove any other
-            component that shows the old .courses-row, otherwise you'll see duplicates.
-           <FeaturedCourses /> 
-        */}
+        {/* large AI promo block */}
+        <AiCareer />
+
+        {/* Skills heading + categories row (tabs) */}
+        <CategoryRow />
+
+        {/* Students are viewing / 4-card grid */}
+        <FeaturedCourses />
+
+        {/* Trusted companies strip */}
+        <Companies />
       </main>
     </div>
   );
 }
-
-export default App;
