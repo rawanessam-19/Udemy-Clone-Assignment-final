@@ -6,11 +6,6 @@ import skills1 from "../assets/skills1.png";
 import skills2 from "../assets/skills2.png";
 import skills3 from "../assets/skills3.png";
 
-export const courses = [
-  { id: 1, title: "The AI Engineer Course 2025", instructor: "365 Careers", price: "£349.99", badge: "Bestseller", rating: 4.4 },
-  { id: 2, title: "The Beginner's Guide to AI", instructor: "Penny de B.", price: "£34.99", badge: "Bestseller", rating: 4.0 },
-  { id: 3, title: "Master of AI in HR & Recruitment", instructor: "Experience Academy", price: "£2,499.99", badge: "Bestseller", rating: 3.1 }
-];
 
 export const navbarLinks = [
   { id: "explore", label: "Explore" },
@@ -28,71 +23,60 @@ export const heroData = {
 export const categories = [
   {
     id: 1,
-    title: "Generative AI",
-    subtitle: "1.7M learners",
-    image: genAiImg
+    title: "The AI Engineer Course 2025",
+    subtitle: "365 Careers",
+    image: skills1,
+    rating: 4.6,
+    students: "11,725 ratings",
+    price: "£309.99"
   },
   {
     id: 2,
-    title: "IT Certifications",
-    subtitle: "1.4M learners",
-    image: itCertImg
+    title: "The Beginner's Guide to AI - Unity 6 Compatible",
+    subtitle: "Penny de B.",
+    image: skills2,
+    rating: 2,
+    students: "2000 ratings",
+    price: "£150"
   },
   {
     id: 3,
-    title: "Data Science",
-    subtitle: "3.8M learners",
-    image: dataSciImg
+    title: "Master of AI in HR & Recruitment",
+    subtitle: "Experience Academy",
+    image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=60",
+    rating: 3.1,
+    students: "6800 ratings",
+    price: "£450"
   },
   {
     id: 4,
-    title: "ChatGPT Tools",
-    subtitle: "900K learners",
-    image: chatgptImg
+    title: "7 Days of Hands-On AI Development Bootcamp",
+    subtitle: "School of AI",
+    image: skills3,
+    rating: 5,
+    students: "450 ratings",
+    price: "£600"
   }
 ];
+
 
 export const featuredCourses = [
   {
     id: 201,
-    title: "The AI Engineer Course 2025: Complete AI Engineer Bootcamp",
-    instructor: "365 Careers",
-    price: "£349.99",
-    badge: "Bestseller",
-    rating: 4.4,
-    students: 1647,
-    image: skills1
+    title: "Generative AI ",
+    image: genAiImg,
   },
   {
     id: 202,
-    title: "The Beginner's Guide to AI - Unity 6 Compatible",
-    instructor: "Penny de B.",
-    price: "£34.99",
-    tag: "Bestseller",
-    rating: 4.0,
-    students: 250,
-    image: skills2
+    title: "IT Certification",
+    image: itCertImg
   },
   {
     id: 203,
-    title: "Master of AI in HR & Recruitment",
-    instructor: "Experience Academy",
-    price: "£2,499.99",
-    tag: "Bestseller",
-    rating: 3.1,
-    students: 50,
-    image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=60"
+    title: "Data Science",
+    image: dataSciImg
   },
-  {
-    id: 204,
-    title: "7 Days of Hands-On AI Development Bootcamp",
-    instructor: "School of AI",
-    price: "£34.99",
-    tag: "Premium",
-    rating: 5.0,
-    students: 3500,
-    image: skills3
-  }
+
 ];
 
 export const trustedCompanies = [

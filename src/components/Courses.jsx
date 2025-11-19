@@ -1,81 +1,83 @@
+
 import React, { useRef, useState, useEffect } from "react";
-import { categories } from "../data/udemyData";
+import { featuredCourses } from "../data/udemyData";
+
+
+function Star({ size = 12 }) {
+  return <span style={{ color: "#FBBF24", fontSize: size, lineHeight: 1 }}>★</span>;
+}
 
 export default function Courses() {
-  const items = Array.isArray(categories) ? categories : [];
-  const visible = 4;
+  const items = Array.isArray(featuredCourses) ? featuredCourses : [];
+  if (!items.length) return null;
+
+  const visible = 4; 
   const trackRef = useRef(null);
   const containerRef = useRef(null);
 
-  const isDown = useRef(false);
   const startX = useRef(0);
-  const startPos = useRef(0);
+  const startPct = useRef(0);
+  const isDragging = useRef(false);
 
   const [index, setIndex] = useState(0);
   const maxIndex = Math.max(0, items.length - visible);
 
-  const setTrack = (pct) => {
+
+  const setTrackPct = (pct) => {
     if (!trackRef.current) return;
     trackRef.current.style.transition = "none";
     trackRef.current.style.transform = `translateX(${pct}%)`;
   };
 
   useEffect(() => {
-    const pct = -(index * (100 / visible));
-    setTrack(pct);
+    setTrackPct(-(index * (100 / visible)));
   }, [index, visible]);
-
-  const prev = () => {
-    setIndex((i) => Math.max(0, i - 1));
-  };
-
-  const next = () => {
-    setIndex((i) => Math.min(maxIndex, i + 1));
-  };
 
   const getX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
 
   const onDown = (e) => {
-    isDown.current = true;
+    isDragging.current = true;
     startX.current = getX(e);
-
     const style = trackRef.current?.style.transform || "";
-    const match = style.match(/translateX\((-?\d+(\.\d+)?)%/);
-    startPos.current = match ? parseFloat(match[1]) : -(index * (100 / visible));
-
+    const m = style.match(/translateX\((-?\d+(\.\d+)?)%/);
+    startPct.current = m ? parseFloat(m[1]) : -(index * (100 / visible));
     if (trackRef.current) trackRef.current.style.transition = "none";
     e.preventDefault?.();
   };
 
   const onMove = (e) => {
-    if (!isDown.current) return;
-    const dx = getX(e) - startX.current;
+    if (!isDragging.current || !trackRef.current) return;
+    const x = getX(e);
+    const dx = x - startX.current;
     const w = containerRef.current?.offsetWidth || 1;
     const dxPct = (dx / w) * 100;
-
-    const newPct = startPos.current + dxPct;
+    const newPct = startPct.current + dxPct;
     const minPct = -(maxIndex * (100 / visible));
-
+    // allow slight overdrag for feel, but clamp
     const clamped = Math.max(minPct - 20, Math.min(20, newPct));
-    setTrack(clamped);
+    setTrackPct(clamped);
   };
 
   const onUp = (e) => {
-    if (!isDown.current) return;
-    isDown.current = false;
-
-    const dx = getX(e) - startX.current;
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const endX = getX(e);
+    const dx = endX - startX.current;
     const w = containerRef.current?.offsetWidth || 1;
-    const threshold = Math.min(80, w * 0.1);
+    const threshold = Math.min(120, w * 0.13);
 
-    if (dx > threshold) prev();
-    else if (dx < -threshold) next();
-    else setTrack(-(index * (100 / visible)));
+    if (dx > threshold) setIndex((i) => Math.max(0, i - 1));
+    else if (dx < -threshold) setIndex((i) => Math.min(maxIndex, i + 1));
+    else setTrackPct(-(index * (100 / visible)));
   };
 
+  const prev = (e) => { e?.stopPropagation(); setIndex(i => Math.max(0, i - 1)); };
+  const next = (e) => { e?.stopPropagation(); setIndex(i => Math.min(maxIndex, i + 1)); };
+
   return (
-    <section className="courses-section container" style={{ paddingTop: 12, paddingBottom: 28 }}>
+    <section className="section container courses-section" style={{ paddingTop: 12, paddingBottom: 28 }}>
       <div className="courses-inner">
+        {}
         <div className="courses-left">
           <h2 className="courses-hero">Learn essential career and life skills</h2>
           <p className="muted" style={{ marginTop: 12, maxWidth: 260 }}>
@@ -83,10 +85,9 @@ export default function Courses() {
           </p>
         </div>
 
+        {}
         <div className="courses-right">
-          <div className="carousel-wrapper" ref={containerRef} style={{ position: "relative" }}>
-
-            {}
+          <div className="carousel-wrapper" style={{ position: "relative" }}>
             <button
               className="carousel-nav prev"
               onClick={prev}
@@ -97,6 +98,7 @@ export default function Courses() {
             </button>
 
             <div
+              ref={containerRef}
               className="carousel-viewport"
               onMouseDown={onDown}
               onMouseMove={onMove}
@@ -107,46 +109,65 @@ export default function Courses() {
               onTouchEnd={onUp}
             >
               <div
-                className="carousel-track"
                 ref={trackRef}
-                style={{ width: `${(items.length * 100) / visible}%` }}
+                className="carousel-track"
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  width: `${(items.length * 100) / visible}%`,
+                  transform: `translateX(${-(index * (100 / visible))}%)`,
+                }}
               >
-                {items.map((item, idx) => (
-                  <div
-                    key={item.id ?? idx}
-                    className="carousel-item"
-                    style={{
-                      width: `${100 / visible}%`,
-                      flex: `0 0 ${100 / visible}%`
-                    }}
-                  >
-                    <article className="course-card mini">
-                      <div className="course-thumb">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          onError={(e) => {
-                            e.currentTarget.src =
-                              "https://via.placeholder.com/480x320?text=No+Image";
-                          }}
-                        />
-                      </div>
+                {items.map((item) => {
+                  const rating = typeof item.rating === "number" ? item.rating : 4.6;
+                  const students = item.students ?? "1,647";
+                  const price = item.price ?? "£34.99";
 
-                      <div className="course-info mini-info">
-                        <div className="course-learners">{item.subtitle}</div>
-                        <div className="course-title" style={{ marginTop: 8 }}>{item.title}</div>
-                        <div className="course-meta-mini" style={{ marginTop: 10 }}>
-                          <div className="muted" />
-                          <div className="meta-right">→</div>
+                  return (
+                    <div
+                      key={item.id}
+                      className="carousel-item"
+                      style={{
+                        width: `${100 / visible}%`,
+                        flex: `0 0 ${100 / visible}%`,
+                        display: "flex",
+                        justifyContent: "center"
+                      }}
+                    >
+                      <article className="course-card mini" style={{ width: "100%", borderRadius: 14 }}>
+                        <div className="course-thumb" style={{ height: 200, overflow: "hidden", borderRadius: 12 }}>
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            draggable={false}
+                            onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/480x320?text=No+Image"; }}
+                          />
                         </div>
-                      </div>
-                    </article>
-                  </div>
-                ))}
+
+                        <div className="course-info mini-info">
+                          <div className="course-learners">{item.subtitle ?? item.instructor}</div>
+                          <div className="course-title" style={{ marginTop: 8 }}>{item.title}</div>
+
+                          <div className="course-meta-mini" style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                              {item.badge && <span style={{ background: "#d1fae5", color: "#065f46", padding: "6px 8px", borderRadius: 8, fontWeight: 700, fontSize: 12 }}>{item.badge}</span>}
+                              <span style={{ display: "inline-flex", gap: 6, alignItems: "center", color: "#6b7280", fontSize: 13 }}>
+                                <Star />
+                                <span>{rating}</span>
+                              </span>
+                            </div>
+
+                            <div className="meta-right" style={{ marginLeft: "auto", fontWeight: 700 }}>{price}</div>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            {}
             <button
               className="carousel-nav next"
               onClick={next}
@@ -157,7 +178,6 @@ export default function Courses() {
             </button>
           </div>
 
-          {}
           <div className="carousel-dots" style={{ marginTop: 18 }}>
             {Array.from({ length: Math.max(1, maxIndex + 1) }).map((_, i) => (
               <button

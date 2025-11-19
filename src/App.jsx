@@ -6,7 +6,6 @@ import Hero from "./components/Hero";
 import Courses from "./components/Courses";         
 import AiCareer from "./components/AiCareer";      
 import CategoryRow from "./components/CategoryRow"; 
-import FeaturedCourses from "./components/FeaturedCourses"; 
 import Companies from "./components/Companies";    
 
 export default function App() {
@@ -27,8 +26,6 @@ export default function App() {
         {}
         <CategoryRow />
 
-        {}
-        <FeaturedCourses />
 
         {}
         <Companies />
