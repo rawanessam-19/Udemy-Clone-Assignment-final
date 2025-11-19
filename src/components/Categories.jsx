@@ -1,4 +1,3 @@
-// place near top of Courses.jsx (or in App.jsx where you want it shown)
 import React from "react";
 import { categories } from "../data/udemyData";
 

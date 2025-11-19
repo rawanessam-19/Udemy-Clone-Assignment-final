@@ -1,6 +1,11 @@
-// src/components/CategoryRow.jsx
 import React from "react";
 import { categories } from "../data/udemyData";
+import chatgptImg from "../assets/chatgpt.png";
+import dataSciImg from "../assets/data sci.png";
+import genAiImg from "../assets/gen ai.png";
+import heroImg from "../assets/hero.png";
+import itCertImg from "../assets/it cert.png";
+
 
 export default function CategoryRow() {
   if (!Array.isArray(categories) || categories.length === 0) return null;
@@ -14,7 +19,7 @@ export default function CategoryRow() {
         </p>
       </div>
 
-      {/* Category tabs (visual only) */}
+      {}
       <div className="category-tabs-wrapper" style={{ marginTop: 12 }}>
         <div className="category-tabs" role="list" style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 8 }}>
           {categories.map(cat => (

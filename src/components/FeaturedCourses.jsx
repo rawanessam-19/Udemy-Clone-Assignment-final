@@ -1,138 +1,185 @@
-// src/components/FeaturedCourses.jsx
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { featuredCourses } from "../data/udemyData";
 
-/**
- * Render stars for a given rating (0-5). Shows:
- * - full star for integer portions
- * - half star if fractional part >= 0.5
- * - empty stars for the rest, always total 5
- *
- * Uses a unique linearGradient id so multiple cards don't conflict.
- */
-function Stars({ rating = 0, size = 12, idPrefix = "s" }) {
+function Stars({ rating = 0, max = 5 }) {
   const full = Math.floor(rating);
-  const half = (rating - full) >= 0.5 ? 1 : 0;
-  const empty = 5 - full - half;
+  const half = rating - full >= 0.5;
+  const empty = max - full - (half ? 1 : 0);
 
-  const stars = [];
+  return (
+    <span className="stars" aria-label={`Rating ${rating} out of ${max}`}>
+      {Array.from({ length: full }).map((_, i) => (
+        <span key={`f${i}`} className="star full">★</span>
+      ))}
 
-  for (let i = 0; i < full; i++) {
-    stars.push(
-      <svg key={`full-${i}`} width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-        <path d="M12 2l2.9 6.1L21 9.3l-5 4.2 1.2 6.9L12 17.8 6.8 20.4 8 13.5 3 9.3l6.1-.2L12 2z" fill="#FBBF24" />
-      </svg>
-    );
-  }
+      {half && (
+        <span className="star half">
+          <span className="star-gold" style={{ width: "50%" }}>★</span>
+          <span className="star-gray">★</span>
+        </span>
+      )}
 
-  if (half === 1) {
-    const gradId = `${idPrefix}-half`;
-    stars.push(
-      <svg key="half" width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-        <defs>
-          <linearGradient id={gradId}>
-            <stop offset="50%" stopColor="#FBBF24" />
-            <stop offset="50%" stopColor="#E5E7EB" />
-          </linearGradient>
-        </defs>
-        <path d="M12 2l2.9 6.1L21 9.3l-5 4.2 1.2 6.9L12 17.8 6.8 20.4 8 13.5 3 9.3l6.1-.2L12 2z" fill={`url(#${gradId})`} />
-      </svg>
-    );
-  }
-
-  for (let i = 0; i < empty; i++) {
-    stars.push(
-      <svg key={`empty-${i}`} width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-        <path d="M12 2l2.9 6.1L21 9.3l-5 4.2 1.2 6.9L12 17.8 6.8 20.4 8 13.5 3 9.3l6.1-.2L12 2z" fill="#E5E7EB" />
-      </svg>
-    );
-  }
-
-  return <span style={{ display: "inline-flex", gap: 4, alignItems: "center" }}>{stars}</span>;
+      {Array.from({ length: empty }).map((_, i) => (
+        <span key={`e${i}`} className="star empty">★</span>
+      ))}
+    </span>
+  );
 }
 
 export default function FeaturedCourses() {
   const items = Array.isArray(featuredCourses) ? featuredCourses : [];
+  const visible = 4;
+  const trackRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const startPct = useRef(0);
+
+  const [index, setIndex] = useState(0);
+  const maxIndex = Math.max(0, items.length - visible);
+
+  const setTrackPct = (pct) => {
+    if (!trackRef.current) return;
+    trackRef.current.style.transition = "none";
+    trackRef.current.style.transform = `translateX(${pct}%)`;
+  };
+
+
+useEffect(() => {
+  if (!trackRef.current) return;
+  setTrackPct(-(index * (100 / visible)), true);
+}, [index]);
+
+
+  useEffect(() => {
+    setTrackPct(-(index * (100 / visible)));
+  }, [index]);
+
+  const cx = e => (e.touches ? e.touches[0].clientX : e.clientX);
+
+  const onDown = (e) => {
+    isDown.current = true;
+    startX.current = cx(e);
+    const style = trackRef.current?.style.transform || "";
+    const m = style.match(/translateX\((-?\d+(\.\d+)?)%/);
+    startPct.current = m ? parseFloat(m[1]) : -(index * (100 / visible));
+    if (trackRef.current) trackRef.current.style.transition = "none";
+    e.preventDefault?.();
+  };
+
+  const onMove = (e) => {
+    if (!isDown.current) return;
+    const x = cx(e);
+    const dx = x - startX.current;
+    const w = containerRef.current?.offsetWidth || 1;
+    const dxPct = (dx / w) * 100;
+    const newPct = startPct.current + dxPct;
+    const minPct = -(maxIndex * (100 / visible));
+    const clamped = Math.max(minPct - 20, Math.min(20, newPct));
+    setTrackPct(clamped);
+  };
+
+  const onUp = (e) => {
+    if (!isDown.current) return;
+    isDown.current = false;
+    const endX = cx(e);
+    const dx = endX - startX.current;
+    const w = containerRef.current?.offsetWidth || 1;
+    const threshold = Math.min(120, w * 0.13);
+
+    if (dx > threshold) setIndex(i => Math.max(0, i - 1));
+    else if (dx < -threshold) setIndex(i => Math.min(maxIndex, i + 1));
+    else setTrackPct(-(index * (100 / visible)));
+  };
+
+  const prev = () => setIndex(i => Math.max(0, i - 1));
+  const next = () => setIndex(i => Math.min(maxIndex, i + 1));
 
   return (
-    <section className="featured-courses container" style={{ paddingTop: 6, paddingBottom: 18 }}>
-      <p className="muted" style={{ marginTop: 0 }}>Courses trending right now</p>
-
-      <div
-        className="course-grid"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 18,
-          marginTop: 8
-        }}
-      >
-        {items.slice(0, 8).map((c, idx) => {
-          // make sure rating and students are numbers (defensive)
-          const rating = (c && (typeof c.rating === "number" ? c.rating : Number(c.rating))) || null;
-          const students = (c && (typeof c.students === "number" ? c.students : Number(c.students))) || null;
-          const badge = c?.badge || c?.tag || null;
-
-          // unique prefix for gradient ids
-          const idPrefix = `star-${c?.id ?? idx}`;
-
-          return (
-            <article key={c.id ?? idx} className="course-card enhanced" style={{ padding: 12, borderRadius: 12 }}>
-              <div className="thumb" aria-hidden>
-                {c.image ? (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: 140,
-                      borderRadius: 8,
-                      backgroundImage: `url(${c.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center"
-                    }}
-                  />
-                ) : (
-                  <svg width="100%" height="140" viewBox="0 0 140 80" fill="none">
-                    <rect width="140" height="80" rx="8" fill="#eef2ff" />
-                  </svg>
-                )}
-              </div>
-
-              <div style={{ marginTop: 10 }}>
-                <div className="course-title" style={{ fontWeight: 700, fontSize: 14 }}>
-                  {c.title}
-                </div>
-
-                <div className="course-instructor muted" style={{ marginTop: 8, fontSize: 13 }}>
-                  {c.instructor}
-                </div>
-
-                {/* meta pills */}
-                <div className="meta-pills" style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "nowrap" }}>
-                  {badge ? <span className="pill small-badge">{badge}</span> : null}
-
-                  {rating != null ? (
-                    <span className="pill small-rating" aria-label={`Rated ${rating} out of 5`}>
-                      <Stars rating={rating} size={12} idPrefix={idPrefix} />
-                      <span style={{ marginLeft: 6, fontWeight: 700 }}>{rating.toFixed(1)}</span>
-                    </span>
-                  ) : null}
-
-                  {students != null ? (
-                    <span className="pill small-count">{students.toLocaleString()} ratings</span>
-                  ) : null}
-                </div>
-
-                <div style={{ marginTop: 10 }}>
-                  <div className="course-price" style={{ fontWeight: 800, fontSize: 16 }}>{c.price ?? ""}</div>
-                </div>
-              </div>
-            </article>
-          );
-        })}
+    <section className="featured-section" style={{ padding: "8px 0 36px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+        <h3 style={{ margin: 0 }}>Courses trending right now</h3>
       </div>
 
-      <div style={{ marginTop: 12 }}>
-        <a href="#" className="muted" style={{ fontSize: 14 }}>Show all Artificial Intelligence (AI) courses →</a>
+      <div style={{ display: "flex", gap: 20 }}>
+        <div style={{ flex: 1, position: "relative" }}>
+          <div
+            ref={containerRef}
+            style={{ overflow: "hidden", userSelect: "none" }}
+            onMouseDown={onDown}
+            onMouseMove={onMove}
+            onMouseUp={onUp}
+            onMouseLeave={onUp}
+            onTouchStart={onDown}
+            onTouchMove={onMove}
+            onTouchEnd={onUp}
+          >
+            <div
+              ref={trackRef}
+              style={{
+                display: "flex",
+                gap: 20,
+                width: `${(items.length * 100) / visible}%`,
+                transform: `translateX(${-(index * (100 / visible))}%)`,
+              }}
+            >
+              {items.map(item => (
+                <div key={item.id} style={{ width: `${100 / visible}%`, flexShrink: 0 }}>
+                  <article className="featured-card" style={{ borderRadius: 12, overflow: "hidden", background: "#fff" }}>
+                    <div style={{ height: 150, overflow: "hidden" }}>
+                      <img src={item.image} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} draggable={false} />
+                    </div>
+
+                    <div style={{ padding: 12 }}>
+                      <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.title}</div>
+                      <div style={{ color: "#6b7280", fontSize: 13 }}>{item.instructor}</div>
+
+                      <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          {item.badge && <span style={{ background: "#dff6ea", color: "#065f46", padding: "4px 8px", borderRadius: 8, fontSize: 12 }}>{item.badge}</span>}
+                          {typeof item.rating === "number" && (
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <Stars rating={item.rating} />
+                              <span style={{ color: "#6b7280", fontSize: 13 }}>{item.rating}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div style={{ fontWeight: 700 }}>{item.price}</div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="featured-arrows" style={{ position: "absolute", left: 0, right: 0, top: 8, display: "flex", justifyContent: "space-between", pointerEvents: "none" }}>
+            <button onClick={(e) => { e.stopPropagation(); prev(); }} className="carousel-arrow left" aria-label="Previous" type="button" style={{ pointerEvents: "auto" }}>‹</button>
+
+            <button onClick={(e) => { e.stopPropagation(); next(); }} className="carousel-arrow right" aria-label="Next" type="button" style={{ pointerEvents: "auto" }}>›</button>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+            {Array.from({ length: Math.max(1, maxIndex + 1) }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                style={{
+                  width: i === index ? 28 : 8,
+                  height: 8,
+                  margin: 6,
+                  borderRadius: 999,
+                  border: "none",
+                  background: i === index ? "#7b3cff" : "#e9e7f3",
+                  cursor: "pointer"
+                }}
+                aria-label={`Go to page ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

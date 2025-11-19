@@ -1,12 +1,6 @@
 import React from "react";
 import { navbarLinks } from "../data/udemyData";
 
-/*
-  Layout behavior:
-  - Left: brand + a single "Explore" link (if present in navbarLinks; otherwise use navbarLinks[0])
-  - Center: big rounded search pill with icon
-  - Right: the rest of navbarLinks (except Explore) + cart/login/signup/lang
-*/
 
 export default function Navbar() {
   // pick Explore (or fallback to first link)
@@ -18,8 +12,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Announcement bar */}
-      <div className="announce">
+{}      <div className="announce">
         <div className="announce-inner container">
           <span className="announce-title">AI is changing the game</span>
           <span className="announce-detail">Get the skills with Udemy Business.</span>
@@ -27,10 +20,10 @@ export default function Navbar() {
         <button className="announce-close" aria-label="Close announcement">×</button>
       </div>
 
-      {/* Main navbar */}
+      {}
       <header className="navbar">
         <div className="nav-inner container">
-          {/* LEFT: logo + Explore */}
+          {}
           <div className="nav-left">
             <a className="brand" href="/">
               <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
@@ -46,7 +39,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* CENTER: search */}
+          {}
           <div className="nav-center">
             <div className="search-small" role="search" aria-label="site search">
               <span className="search-icon" aria-hidden>🔍</span>
@@ -54,7 +47,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* RIGHT: remaining links + icons/buttons */}
+          {}
           <div className="nav-right">
             {rightItems.map((l) => (
               <a key={l.id} className="nav-link" href={l.href || "/"}>

@@ -1,4 +1,3 @@
-// src/components/CategoryGrid.jsx
 import React from "react";
 import { categories } from "../data/udemyData";
 

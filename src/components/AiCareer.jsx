@@ -1,5 +1,11 @@
-// src/components/AiCareer.jsx
+
 import React from "react";
+
+
+import aiEraMain from "../assets/ai era.png";
+import sparkles from "../assets/chatgpt.png";    
+import controller from "../assets/gen ai.png";    
+import headphones from "../assets/data sci.png";  
 
 export default function AiCareer() {
   return (
@@ -17,7 +23,7 @@ export default function AiCareer() {
         color: "white"
       }}
     >
-      {/* LEFT SIDE */}
+      {}
       <div style={{ flex: 1, maxWidth: 480 }}>
         <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 12 }}>
           Reimagine your career in the AI era
@@ -28,14 +34,13 @@ export default function AiCareer() {
           content from real-world experts.
         </p>
 
-        {/* ICON LIST */}
+        {}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             marginTop: 20,
-            gap: 14,
-            color: "#F3F4F6"
+            gap: 14
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -75,8 +80,7 @@ export default function AiCareer() {
         </p>
       </div>
 
-      {/* RIGHT SIDE IMAGES */}
-      <div
+{}      <div
         style={{
           flex: 1,
           display: "grid",
@@ -84,54 +88,53 @@ export default function AiCareer() {
           gap: 16
         }}
       >
+        {}
         <div
           style={{
-            background: `url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=60")`,
+            backgroundImage: `url(${aiEraMain})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             borderRadius: 12,
             height: 220
           }}
         />
 
-        <div
-          style={{ 
-            background: "#B197FC",
-            borderRadius: 12,
-            height: 220,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
-          <span style={{ fontSize: 48 }}>✨</span>
-        </div>
-
+        {}
         <div
           style={{
-            background: "#6E3BFF",
+            backgroundImage: `url(${sparkles})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             borderRadius: 12,
-            height: 220,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
+            height: 220
           }}
-        >
-          <span style={{ fontSize: 48 }}>🎮</span>
-        </div>
+        />
 
+        {}
         <div
           style={{
-            background: "#C084FC",
+            backgroundImage: `url(${controller})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             borderRadius: 12,
-            height: 220,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
+            height: 220
           }}
-        >
-          <span style={{ fontSize: 48 }}>🎧</span>
-        </div>
+        />
+
+        {}
+        <div
+          style={{
+            backgroundImage: `url(${headphones})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            borderRadius: 12,
+            height: 220
+          }}
+        />
       </div>
     </section>
   );

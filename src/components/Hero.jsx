@@ -1,5 +1,6 @@
 import React from "react";
 import { heroData } from "../data/udemyData";
+import heroBanner from "../assets/hero.png";
 
 export default function Hero() {
   return (
@@ -24,7 +25,7 @@ export default function Hero() {
 
         <div className="hero-right">
           <img
-            src="src/assets/hero-banner.jpg"
+            src={heroBanner}
             alt="Hero Banner"
             className="hero-banner-img"
           />

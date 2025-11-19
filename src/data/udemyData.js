@@ -1,6 +1,17 @@
-// src/data/udemyData.js
+import chatgptImg from "../assets/chatgpt.png";
+import dataSciImg from "../assets/data sci.png";
+import genAiImg from "../assets/gen ai.png";
+import itCertImg from "../assets/it cert.png";
+import skills1 from "../assets/skills1.png";
+import skills2 from "../assets/skills2.png";
+import skills3 from "../assets/skills3.png";
 
-// Navbar links
+export const courses = [
+  { id: 1, title: "The AI Engineer Course 2025", instructor: "365 Careers", price: "£349.99", badge: "Bestseller", rating: 4.4 },
+  { id: 2, title: "The Beginner's Guide to AI", instructor: "Penny de B.", price: "£34.99", badge: "Bestseller", rating: 4.0 },
+  { id: 3, title: "Master of AI in HR & Recruitment", instructor: "Experience Academy", price: "£2,499.99", badge: "Bestseller", rating: 3.1 }
+];
+
 export const navbarLinks = [
   { id: "explore", label: "Explore" },
   { id: "plans", label: "Plans & Pricing" },
@@ -8,39 +19,37 @@ export const navbarLinks = [
   { id: "teach", label: "Teach on Udemy" },
 ];
 
-// Hero content + large hero image hosted on unsplash
 export const heroData = {
   title: "Master tomorrow’s skills today",
-  subtitle:
-    "Power up your AI, career, and life skills with the most up-to-date, expert-led learning.",
-  heroImage:
-    "https://img-c.udemycdn.com/notices/home_banner/image_udlite/3d1b93d7-2ceb-4bea-b88a-8b9f843a95a2.jpg"
+  subtitle: "Power up your AI, career, and life skills with the most up-to-date, expert-led learning.",
+  heroImage: "https://img-c.udemycdn.com/notices/home_banner/image_udlite/3d1b93d7-2ceb-4bea-b88a-8b9f843a95a2.jpg"
 };
 
-
-// categories (cards)
 export const categories = [
   {
     id: 1,
     title: "Generative AI",
     subtitle: "1.7M learners",
-    image:
-      "https://images.unsplash.com/photo-1555949963-aa79dcee981d?auto=format&fit=crop&w=800&q=60",
+    image: genAiImg
   },
   {
     id: 2,
     title: "IT Certifications",
     subtitle: "1.4M learners",
-    image:
-      "https://images.unsplash.com/photo-1526378729258-4f8d3d4b6d69?auto=format&fit=crop&w=800&q=60",
+    image: itCertImg
   },
   {
     id: 3,
     title: "Data Science",
     subtitle: "3.8M learners",
-    image:
-      "https://images.unsplash.com/photo-1531497865149-3f9d12f0f0a6?auto=format&fit=crop&w=800&q=60",
+    image: dataSciImg
   },
+  {
+    id: 4,
+    title: "ChatGPT Tools",
+    subtitle: "900K learners",
+    image: chatgptImg
+  }
 ];
 
 export const featuredCourses = [
@@ -52,7 +61,7 @@ export const featuredCourses = [
     badge: "Bestseller",
     rating: 4.4,
     students: 1647,
-    image: "https://images.unsplash.com/photo-1584697964190-55d6b0b2f2d1?auto=format&fit=crop&w=800&q=60"
+    image: skills1
   },
   {
     id: 202,
@@ -62,8 +71,7 @@ export const featuredCourses = [
     tag: "Bestseller",
     rating: 4.0,
     students: 250,
-    image:
-      "https://images.unsplash.com/photo-1526378729258-4f8d3d4b6d69?auto=format&fit=crop&w=800&q=60",
+    image: skills2
   },
   {
     id: 203,
@@ -73,8 +81,7 @@ export const featuredCourses = [
     tag: "Bestseller",
     rating: 3.1,
     students: 50,
-    image:
-      "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=60",
+    image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=800&q=60"
   },
   {
     id: 204,
@@ -84,13 +91,10 @@ export const featuredCourses = [
     tag: "Premium",
     rating: 5.0,
     students: 3500,
-    image:
-      "https://images.unsplash.com/photo-1526378729258-4f8d3d4b6d69?auto=format&fit=crop&w=800&q=60",
-  },
+    image: skills3
+  }
 ];
 
-
-// trusted companies — use Clearbit logo service (hosted logos)
 export const trustedCompanies = [
   { id: "vok", domain: "volkswagen.co.uk", name: "Volkswagen" },
   { id: "samsung", domain: "samsung.com", name: "Samsung" },
@@ -99,5 +103,5 @@ export const trustedCompanies = [
   { id: "pg", domain: "pg.com", name: "P&G" },
   { id: "hp", domain: "hp.com", name: "HPE" },
   { id: "citi", domain: "citi.com", name: "Citi" },
-  { id: "eric", domain: "ericsson.com", name: "Ericsson" },
+  { id: "eric", domain: "ericsson.com", name: "Ericsson" }
 ];

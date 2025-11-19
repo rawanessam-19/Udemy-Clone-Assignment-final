@@ -1,4 +1,3 @@
-// src/components/Companies.jsx
 import React from "react";
 import { trustedCompanies } from "../data/udemyData";
 
