@@ -1,31 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { featuredCourses } from "../data/udemyData";
 
-function Stars({ rating = 0, max = 5 }) {
-  const full = Math.floor(rating);
-  const half = rating - full >= 0.5;
-  const empty = max - full - (half ? 1 : 0);
-
-  return (
-    <span className="stars" aria-label={`Rating ${rating} out of ${max}`}>
-      {Array.from({ length: full }).map((_, i) => (
-        <span key={`f${i}`} className="star full">★</span>
-      ))}
-
-      {half && (
-        <span className="star half">
-          <span className="star-gold" style={{ width: "50%" }}>★</span>
-          <span className="star-gray">★</span>
-        </span>
-      )}
-
-      {Array.from({ length: empty }).map((_, i) => (
-        <span key={`e${i}`} className="star empty">★</span>
-      ))}
-    </span>
-  );
-}
-
 export default function FeaturedCourses() {
   const items = Array.isArray(featuredCourses) ? featuredCourses : [];
   const visible = 4;
@@ -45,18 +20,11 @@ export default function FeaturedCourses() {
     trackRef.current.style.transform = `translateX(${pct}%)`;
   };
 
-
-useEffect(() => {
-  if (!trackRef.current) return;
-  setTrackPct(-(index * (100 / visible)), true);
-}, [index]);
-
-
   useEffect(() => {
     setTrackPct(-(index * (100 / visible)));
-  }, [index]);
+  }, [index, visible]);
 
-  const cx = e => (e.touches ? e.touches[0].clientX : e.clientX);
+  const cx = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
 
   const onDown = (e) => {
     isDown.current = true;
@@ -69,7 +37,7 @@ useEffect(() => {
   };
 
   const onMove = (e) => {
-    if (!isDown.current) return;
+    if (!isDown.current || !trackRef.current) return;
     const x = cx(e);
     const dx = x - startX.current;
     const w = containerRef.current?.offsetWidth || 1;
@@ -88,13 +56,13 @@ useEffect(() => {
     const w = containerRef.current?.offsetWidth || 1;
     const threshold = Math.min(120, w * 0.13);
 
-    if (dx > threshold) setIndex(i => Math.max(0, i - 1));
-    else if (dx < -threshold) setIndex(i => Math.min(maxIndex, i + 1));
+    if (dx > threshold) setIndex((i) => Math.max(0, i - 1));
+    else if (dx < -threshold) setIndex((i) => Math.min(maxIndex, i + 1));
     else setTrackPct(-(index * (100 / visible)));
   };
 
-  const prev = () => setIndex(i => Math.max(0, i - 1));
-  const next = () => setIndex(i => Math.min(maxIndex, i + 1));
+  const prev = () => setIndex((i) => Math.max(0, i - 1));
+  const next = () => setIndex((i) => Math.min(maxIndex, i + 1));
 
   return (
     <section className="featured-section" style={{ padding: "8px 0 36px" }}>
@@ -124,23 +92,52 @@ useEffect(() => {
                 transform: `translateX(${-(index * (100 / visible))}%)`,
               }}
             >
-              {items.map(item => (
+              {items.map((item) => (
                 <div key={item.id} style={{ width: `${100 / visible}%`, flexShrink: 0 }}>
-                  <article className="featured-card" style={{ borderRadius: 12, overflow: "hidden", background: "#fff" }}>
+                  <article
+                    className="featured-card"
+                    style={{ borderRadius: 12, overflow: "hidden", background: "#fff" }}
+                  >
                     <div style={{ height: 150, overflow: "hidden" }}>
-                      <img src={item.image} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} draggable={false} />
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        draggable={false}
+                      />
                     </div>
 
                     <div style={{ padding: 12 }}>
                       <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.title}</div>
                       <div style={{ color: "#6b7280", fontSize: 13 }}>{item.instructor}</div>
 
-                      <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between" }}>
+                      <div
+                        style={{
+                          marginTop: 10,
+                          display: "flex",
+                          gap: 8,
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                          {item.badge && <span style={{ background: "#dff6ea", color: "#065f46", padding: "4px 8px", borderRadius: 8, fontSize: 12 }}>{item.badge}</span>}
+                          {item.badge && (
+                            <span
+                              style={{
+                                background: "#dff6ea",
+                                color: "#065f46",
+                                padding: "4px 8px",
+                                borderRadius: 8,
+                                fontSize: 12,
+                              }}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+
                           {typeof item.rating === "number" && (
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <Stars rating={item.rating} />
+                              <span style={{ color: "#FBBF24", fontSize: 12 }}>★</span>
                               <span style={{ color: "#6b7280", fontSize: 13 }}>{item.rating}</span>
                             </div>
                           )}
@@ -155,10 +152,43 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="featured-arrows" style={{ position: "absolute", left: 0, right: 0, top: 8, display: "flex", justifyContent: "space-between", pointerEvents: "none" }}>
-            <button onClick={(e) => { e.stopPropagation(); prev(); }} className="carousel-arrow left" aria-label="Previous" type="button" style={{ pointerEvents: "auto" }}>‹</button>
+          <div
+            className="featured-arrows"
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              top: 8,
+              display: "flex",
+              justifyContent: "space-between",
+              pointerEvents: "none",
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                prev();
+              }}
+              className="carousel-arrow left"
+              aria-label="Previous"
+              type="button"
+              style={{ pointerEvents: "auto" }}
+            >
+              ‹
+            </button>
 
-            <button onClick={(e) => { e.stopPropagation(); next(); }} className="carousel-arrow right" aria-label="Next" type="button" style={{ pointerEvents: "auto" }}>›</button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                next();
+              }}
+              className="carousel-arrow right"
+              aria-label="Next"
+              type="button"
+              style={{ pointerEvents: "auto" }}
+            >
+              ›
+            </button>
           </div>
 
           <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
@@ -173,7 +203,7 @@ useEffect(() => {
                   borderRadius: 999,
                   border: "none",
                   background: i === index ? "#7b3cff" : "#e9e7f3",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
                 aria-label={`Go to page ${i + 1}`}
               />
